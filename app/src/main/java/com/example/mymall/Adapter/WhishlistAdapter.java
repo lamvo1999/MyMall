@@ -130,8 +130,10 @@ public class WhishlistAdapter extends RecyclerView.Adapter<WhishlistAdapter.View
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteBtn.setEnabled(false);
-                    DBqueries.removeFromWishlist(index, itemView.getContext());
+                    if (!ProductDetailsActivity.running_wishlist_query) {
+                        ProductDetailsActivity.running_wishlist_query = true;
+                        DBqueries.removeFromWishlist(index, itemView.getContext());
+                    }
                 }
             });
 

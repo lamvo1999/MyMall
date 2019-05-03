@@ -99,7 +99,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
    private FirebaseUser currentUser;
 
    /////////// rating layout
-    private LinearLayout rateNowContainer;
+    public static LinearLayout rateNowContainer;
     private TextView totalRatings;
     private LinearLayout ratingsNoContainer;
     private TextView totalRatingsFigure;
@@ -227,8 +227,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
                            productDetailsViewPager.setAdapter(new ProductDetailsAdapter(getSupportFragmentManager(),productDetailsTabLayout.getTabCount(),productDescription, productOtherDetails, productSpecificationModelList));
 
                            if (currentUser != null) {
+                               if (DBqueries.myRating.size() == 0){
+                                   DBqueries.loadRaingList(ProductDetailsActivity.this);
+                               }
                                if (DBqueries.wishList.size() == 0) {
                                    DBqueries.loadWishList(ProductDetailsActivity.this, loadingDialog, false);
+                                   DBqueries.loadRaingList(ProductDetailsActivity.this);
                                } else {
                                    loadingDialog.dismiss();
                                }
@@ -260,7 +264,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 if (currentUser == null){
                     signInDiaLog.show();
                 }else {
-//                    addToWhishListBtn.setEnabled(false);
                     if (!running_wishlist_query) {
                         running_wishlist_query = true;
                         if (ALREADY_ADDED_TO_WISHLIST) {
@@ -307,12 +310,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                                     String error = task.getException().toString();
                                                     Toast.makeText(ProductDetailsActivity.this, "ERROR :" + error, Toast.LENGTH_SHORT).show();
                                                 }
-                                                addToWhishListBtn.setEnabled(true);
+                                                running_wishlist_query = false;
                                             }
                                         });
 
                                     } else {
-                                        addToWhishListBtn.setEnabled(true);
+                                        running_wishlist_query = false;
                                         String error = task.getException().toString();
                                         Toast.makeText(ProductDetailsActivity.this, "ERROR :" + error, Toast.LENGTH_SHORT).show();
                                     }
@@ -490,8 +493,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
             coupenRedmeptionLayout.setVisibility(View.VISIBLE);
         }
         if (currentUser != null) {
+            if (DBqueries.myRating.size() == 0){
+                DBqueries.loadRaingList(ProductDetailsActivity.this);
+            }
             if (DBqueries.wishList.size() == 0) {
                 DBqueries.loadWishList(ProductDetailsActivity.this, loadingDialog, false);
+                DBqueries.loadRaingList(ProductDetailsActivity.this);
             } else {
                 loadingDialog.dismiss();
             }
@@ -517,7 +524,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void setRating(int startPosition) {
+    public static void setRating(int startPosition) {
         for (int x =0; x < rateNowContainer.getChildCount(); x++){
             ImageView startBtn = (ImageView)rateNowContainer.getChildAt(x);
             startBtn.setImageTintList(ColorStateList.valueOf(Color.parseColor("#bebebe")));
