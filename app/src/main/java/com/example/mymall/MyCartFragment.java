@@ -1,6 +1,7 @@
 package com.example.mymall;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.mymall.Adapter.CartAdapter;
+import com.example.mymall.Adapter.WhishlistAdapter;
+import com.example.mymall.DBsetdata.DBqueries;
 import com.example.mymall.Model.CartItemModel;
 import com.example.mymall.Model.CategoryModel;
 
@@ -31,6 +35,8 @@ public class MyCartFragment extends Fragment {
 
     private RecyclerView cartItemsRecyclerView;
     private Button contiuneBtn;
+    private Dialog loadingDialog;
+    public static CartAdapter cartAdapter;
 
 
     @Override
@@ -39,6 +45,16 @@ public class MyCartFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_cart, container, false);
 
+        ///////// loading dialog
+
+        loadingDialog = new Dialog(getContext());
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(true);
+        loadingDialog.getWindow().setBackgroundDrawable(getContext().getDrawable(R.drawable.slider_background));
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.show();
+        //////////loading dialog
+
         cartItemsRecyclerView = view.findViewById(R.id.cart_items_recyclerview);
         contiuneBtn = view.findViewById(R.id.cart_continue_btn);
 
@@ -46,13 +62,14 @@ public class MyCartFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         cartItemsRecyclerView.setLayoutManager(layoutManager);
 
-        List<CartItemModel> cartItemModelList = new ArrayList<>();
-        cartItemModelList.add(new CartItemModel(0,R.drawable.product_image,"Pixel 2", 2,"Rs.49999/-","Rs.59999/-",1,0,0));
-        cartItemModelList.add(new CartItemModel(0,R.drawable.product_image,"Pixel 2", 0,"Rs.49999/-","Rs.59999/-",1,1,0));
-        cartItemModelList.add(new CartItemModel(0,R.drawable.product_image,"Pixel 2", 2,"Rs.49999/-","Rs.59999/-",1,2,0));
-        cartItemModelList.add(new CartItemModel(1,"Price (3 items)","Rs.169999/-","Free","Rs.169999/-","Rs.5999/-"));
+        if (DBqueries.cartItemModelList.size() == 0){
+            DBqueries.cartList.clear();
+            DBqueries.loadCartList(getContext(), loadingDialog, true,new TextView(getContext()));
+        }else {
+            loadingDialog.dismiss();
+        }
 
-        CartAdapter cartAdapter = new CartAdapter(cartItemModelList);
+        cartAdapter = new CartAdapter(DBqueries.cartItemModelList);
         cartItemsRecyclerView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
 
