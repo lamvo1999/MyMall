@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.mymall.Adapter.CartAdapter;
 import com.example.mymall.Model.CartItemModel;
@@ -22,6 +23,7 @@ public class DeliveryActivity extends AppCompatActivity {
     private RecyclerView deliveryRecyclerview;
     private Button changeOrAddNewAddressBtn;
     public static final int SELECT_ADDRESS = 0;
+    private TextView totalAmount ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class DeliveryActivity extends AppCompatActivity {
 
         deliveryRecyclerview = findViewById(R.id.delivery_ryceclerview);
         changeOrAddNewAddressBtn = findViewById(R.id.change_or_address_btn);
+        totalAmount = findViewById(R.id.total_cart_amount);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -42,7 +45,7 @@ public class DeliveryActivity extends AppCompatActivity {
 
         List<CartItemModel> cartItemModelList = new ArrayList<>();
 
-        CartAdapter cartAdapter = new CartAdapter(cartItemModelList);
+        CartAdapter cartAdapter = new CartAdapter(cartItemModelList,totalAmount);
         deliveryRecyclerview.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
 

@@ -10,4 +10,13 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string-array name="india_state">
+        <item>Ha noi</item>
+        <item>Quang nam</item>
+        <item>Sai Gon</item>
+        <item>Phu yen</item>
+        <item>Dak lak</item>
+        <item>Da nang</item>
+        <item>quang binh</item>
+    </string-array>
 </resources>

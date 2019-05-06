@@ -26,10 +26,14 @@ public class CartAdapter extends RecyclerView.Adapter {
 
     private List<CartItemModel> cartItemModelList;
     private int lastPosition = -1;
+    private TextView cartTotalAmount ;
 
-    public CartAdapter(List<CartItemModel> cartItemModelList) {
+    public CartAdapter(List<CartItemModel> cartItemModelList , TextView cartTotalAmount) {
         this.cartItemModelList = cartItemModelList;
+        this.cartTotalAmount = cartTotalAmount ;
     }
+
+
 
     @Override
     public int getItemViewType(int position) {
@@ -236,6 +240,7 @@ public class CartAdapter extends RecyclerView.Adapter {
                   deliveryPrice.setText("US$."+deliveryPriceText);
               }
               totalAmount.setText("US$."+totalAmountText);
+              cartTotalAmount.setText("US$."+totalAmountText);
               savedAmount.setText("You saver US$."+savedAmountText+" on this order.");
         }
     }
