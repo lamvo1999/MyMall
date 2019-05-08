@@ -395,9 +395,10 @@ public class DBqueries {
                 Intent deliveryIntent ;
                   if ((long)task.getResult().get("list_size") == 0){
                        deliveryIntent = new Intent(context, AddAddressActivity.class);
+                       deliveryIntent.putExtra("INTENT","deliveryIntent");
                   }else {
                       for (long x = 1;x<(long)task.getResult().get("list_size")+1;x++){
-                          addressesModelList.add(new AddressesModel(task.getResult().get("fullnamr_"+x).toString(),
+                          addressesModelList.add(new AddressesModel(task.getResult().get("fullname_"+x).toString(),
                                   task.getResult().get("address_"+x).toString(),
                                   task.getResult().get("pincode_"+x).toString(),
                                   (boolean)task.getResult().get("selected_"+x)));
@@ -406,6 +407,7 @@ public class DBqueries {
                           }
                       }
                        deliveryIntent = new Intent(context, DeliveryActivity.class);
+
                   }
                   context.startActivity(deliveryIntent);
               }else{

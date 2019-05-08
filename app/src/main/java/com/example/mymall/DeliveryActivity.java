@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.mymall.Adapter.CartAdapter;
+import com.example.mymall.DBsetdata.DBqueries;
 import com.example.mymall.Model.CartItemModel;
 
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ public class DeliveryActivity extends AppCompatActivity {
     private Button changeOrAddNewAddressBtn;
     public static final int SELECT_ADDRESS = 0;
     private TextView totalAmount ;
+    private TextView fullname;
+    private TextView fullAddress;
+    private TextView pincode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +43,15 @@ public class DeliveryActivity extends AppCompatActivity {
         changeOrAddNewAddressBtn = findViewById(R.id.change_or_address_btn);
         totalAmount = findViewById(R.id.total_cart_amount);
 
+        fullname =(TextView) findViewById(R.id.fullname);
+        fullAddress =(TextView) findViewById(R.id.address);
+        pincode =(TextView) findViewById(R.id.pincode);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         deliveryRecyclerview.setLayoutManager(layoutManager);
 
-        List<CartItemModel> cartItemModelList = new ArrayList<>();
-
-        CartAdapter cartAdapter = new CartAdapter(cartItemModelList,totalAmount);
+        CartAdapter cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount,false);
         deliveryRecyclerview.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
 
@@ -59,6 +65,16 @@ public class DeliveryActivity extends AppCompatActivity {
             }
         });
 
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        fullname.setText(DBqueries.addressesModelList.get(DBqueries.selectedAddress).getFullnamr());
+        fullAddress.setText(DBqueries.addressesModelList.get(DBqueries.selectedAddress).getAddress());
+        pincode.setText(DBqueries.addressesModelList.get(DBqueries.selectedAddress).getPincode());
     }
 
     @Override
